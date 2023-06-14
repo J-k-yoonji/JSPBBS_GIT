@@ -8,19 +8,19 @@
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0">
 <!-- 루트폴더의 부트스트랩 참조 링크 -->
 <link rel="stylesheet" href="css/bootstrap.css">
-<title>로그인 창</title>
+<title>메인 화면</title>
 </head>
 <style>
-/* 구글에서 제공해 주는 폰트를 가져다 쓰는 방법 해당 폰트가 있는 구글의 주소로 매칭*/
-@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
-@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
-
-* {
-	font-family : 'Nanum Gothic';
-}
-h1 {
-	font-family : 'Hanna';
-}
+	/* 구글에서 제공해 주는 폰트를 가져다 쓰는 방법 해당 폰트가 있는 구글의 주소로 매칭*/
+	@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+	@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
+	
+	* {
+		font-family : 'Nanum Gothic';
+	}
+	h1 {
+		font-family : 'Hanna';
+	}
 </style>
 <body>
 <jsp:include page="./include/nav.jsp" />
@@ -54,13 +54,13 @@ h1 {
 				<!-- 현재 선택이 되어있는 사진을 보여준다, -->
 				<div class="item active">
 					<!-- images파일 안에있는 1이라는 사진을 가져온다 -->
-					<img src="images/1.jpg">
+					<img src="images/outdoor.jpg">
 				</div>
 				<div class="item">
-					<img src="images/2.jpg">
+					<img src="images/outdoor.jpg">
 				</div>
 				<div class="item">
-					<img src="images/3.jpg">
+					<img src="images/outdoor.jpg">
 				</div>
 			</div>
 			<!-- 이제 사진을 양 옆으로 넘길 수 있는 버튼을 구현 해준다. -->
