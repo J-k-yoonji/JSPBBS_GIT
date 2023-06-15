@@ -10,6 +10,7 @@
 <!-- 건너오는 모든 데이터를 UTF-8로 받기위해 설정 -->
 <% request.setCharacterEncoding("UTF-8"); %>
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -57,21 +58,30 @@ h1 {
                 	//list 생성 그 값은 현재의 페이지에서 가져온 리스트 게시글목록
                     ArrayList<BoardVO> list = boardDAO.getList();
                     //가져온 목록을 하나씩 출력하도록 선언한다..
-                	for(int i = 0; i < list.size(); i++)
+/*                 	for(int i = 0; i < list.size(); i++) */
+                    for (BoardVO boardVO : list)
                     {
                 %>
+                <% 
+/*                 request.setAttribute("list", list);  */
+                   request.setAttribute("boardVO", boardVO);
+                %>
+                <c:set var="title" value="${boardVO.bbsTitle}"/>
                 <!-- 실제 데이터를 사용자에게 보여주는 부분 -->
                     <tr>
                     	<!-- 현재의 게시글에 대한 정보를 하나씩 데이터를 데이터베이스에서 불러와서 보여준다. -->
-                        <td><%=list.get(i).getBbsID() %></td>
+                        <td><%=boardVO.getBbsID() %></td>
                         <!-- 제목을 눌렀을때는 해당 게시글의 내용을 보여주는 페이지로 이동해야하기때문에
                          view.jsp페이지로 해당 게시글번호를 매개변수로 보내서 처리한다. href="주소?변수명 = 값! 이런식으로 처리를 해준다.-->
-                        <td><a href="view.jsp?bbsID=<%=list.get(i).getBbsID()%>"><%=list.get(i).getBbsTitle() %></a></td>
-                        <td><%=list.get(i).getUserID() %></td>
-                        <td><%=list.get(i).getBbsViewcount() %></td>
+                        <td><a href="view.jsp?bbsID=<%=boardVO.getBbsID()%>"><c:out value="${title}"/></a>
+                        </td>
+<%--                         <td><a href="view.jsp?bbsID=<%=boardVO.getBbsID()%>"><%=boardVO.getBbsTitle() %><c:out value="${title}"/></a>
+                        </td> --%>
+                        <td><%=boardVO.getUserID() %></td>
+                        <td><%=boardVO.getBbsViewcount() %></td>
                         <!--날짜 데이터를 가져오는것은 substring(index,index) 함수는 DB내부에서 필요한 정보만 잘라서 들고오게 해 주는 함수-->
-                        <td><%=list.get(i).getBbsRegDate().substring(0,11) + list.get(i).getBbsRegDate().substring(11, 13) + "시" 
-                        + list.get(i).getBbsRegDate().substring(14,16) + "분" %></td>
+                        <td><%=boardVO.getBbsRegDate().substring(0,11) + boardVO.getBbsRegDate().substring(11, 13) + "시" 
+                        + boardVO.getBbsRegDate().substring(14,16) + "분" %></td>
                     </tr>
                 <%
                     }

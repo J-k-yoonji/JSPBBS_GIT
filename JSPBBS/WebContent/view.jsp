@@ -4,8 +4,9 @@
 <%@ page import="dao.BoardDAO" %>
 <%@ page import="java.io.PrintWriter" %>    
 <!-- 건너오는 모든 데이터를 UTF-8로 받기위해 설정 -->
-<% request.setCharacterEncoding("UTF-8"); %>
+<% request.setCharacterEncoding("UTF-8"); %> 
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -76,7 +77,11 @@
 						<tr>
 							<!-- 게시판 글 보기 내부 1행 작성 -->
 							<td style="width: 20%;"> 글 제목 </td>
-							<td colspan="2"><%= boardVO.getBbsTitle().replaceAll(" ", "&nbsp;").replaceAll("<","&lt;").replaceAll(">", "&gt;").replaceAll("\n","<br>") %></td>
+							<td colspan="2">
+							<% request.setAttribute("boardVO", boardVO); %>
+							<c:set var="title" value="${boardVO.bbsTitle}"/>
+							<c:out value="${title}"/>
+							</td>
 						</tr>
 						<tr>
 							<!-- 게시판 글 보기 내부 2행 작성 -->
@@ -96,7 +101,11 @@
 							<!-- 들어갈 내용에 replaceAll을 사용해서 특수문자나 기호가 들어가도 정상 출력이 되게 해 주는 처리를 한다.
 							replaceAll("공백","&nbsp;") 공백을 nbsp로 치환해서 출력해 줌 특수문자 치환을 넣어주면 크로스 브라우징 해킹방지도 가능하다.-->
 							<td colspan="2" style="min-height: 200px; text-align: left;">
-							<%= boardVO.getBbsContent().replaceAll(" ", "&nbsp;").replaceAll("<","&lt;").replaceAll(">", "&gt;").replaceAll("\n","<br>")%></td>
+							<% String str = boardVO.getBbsContent().replaceAll(" ", "&nbsp;"); %>
+							<% str = str.replaceAll("<","&lt;"); %>
+							<% str = str.replaceAll(">", "&gt;"); %>
+							<% str = str.replaceAll("\n","<br>"); %>
+							<%= str %>
 						</tr>
 					</tbody>
 				</table>
