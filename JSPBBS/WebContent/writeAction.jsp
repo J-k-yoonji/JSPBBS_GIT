@@ -1,6 +1,7 @@
 <!-- 실제로 글쓰기를 눌러서 글을 작성해 주는 페이지 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="vo.BoardVO"%>	
 <!-- 게시글을 작성할 수 있는 데이터베이스는 BbsDAO객체를 이용해서 다룰수 있기때문에 참조 -->	
 <%@ page import="dao.BoardDAO"%>
 <!-- bbsdao의 클래스 가져옴 -->
@@ -11,7 +12,7 @@
 	response.setContentType("text/html; charset=UTF-8");
 %>
 <!-- 하나의 게시글 정보를 담을 수 있게 Bbs자바빈즈를 사용-->
-<jsp:useBean id="boardVO" class="vo.BoardVO" scope="page" />
+<jsp:useBean id="boardVO" class="vo.BoardVO" scope="request" />
 <!-- 하나의 게시글 인스턴스 구현 -->
 <jsp:setProperty name="boardVO" property="bbsTitle" />
 <jsp:setProperty name="boardVO" property="bbsContent" />
@@ -19,6 +20,7 @@
 	System.out.println(boardVO);
 %>
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -26,6 +28,7 @@
 </head>
 <body>
 	<%
+/* 	    BoardVO boardVO = new BoardVO(); */
 	    //현재 세션 상태 체크
 		String userID = null;
 		if (session.getAttribute("userID") != null) {//유저아이디이름으로 세션이 존재하는 회원들은 
@@ -48,10 +51,33 @@
 				script.println("history.back()");
 				script.println("</script>");
 			} else {
-				//실제로 데이터 베이스에 등록을 해준다 boardDAO 인스턴스를 만들고,
+				
+				//입력까지 잘 됐다면, 실제로 데이터 베이스에 등록을 해준다. 
+				
+				// 폼값 받기
+/* 				String title = request.getParameter("title");
+				String content = request.getParameter("content"); */
+/* 				
+				// 폼값을 VO객체에 저장
+				BoardVO boardVO = new BoardVO();
+				boardVO.setBbsTitle(title); 
+				boardVO.setBbsContent(content);  */
+				
+				//boardDAO 인스턴스를 만들고, write메서드를 호출,실행하여 실제로 게시글을 작성 할 수 있게 한다. userID
 				BoardDAO boardDAO = new BoardDAO();
-				//write메서드를 호출,실행하여 실제로 게시글을 작성 할 수 있게 한다. userID
-				int result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent());
+                String title = boardVO.getBbsTitle();
+
+//				int result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent()); //원래 코드
+ 				
+                //더미데이터 생성을 위해 임시로 작성
+                int result = 0;
+                for (int i = 1; i<=100; i++) {
+                	boardVO.setBbsTitle(title + "-" + i);
+                	result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent()); //원래 코드
+                }
+				 
+				
+				
 				//만약에 함수에 반환된 값이 -1라면 DB오류 발생이니까
 				if (result == -1) {
 					//실패했다고 알려준다

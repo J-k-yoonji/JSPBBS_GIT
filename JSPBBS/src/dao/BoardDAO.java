@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -52,7 +53,7 @@ public class BoardDAO {
 		//BoardVO 클래스에서 나오는 인스턴스를 보관할 수 있는 list를 하나만들어서 new ArrayList<BoardVO>();를 담아준다.
 		ArrayList<BoardVO> list = new ArrayList<BoardVO>();
 		//최신글이 제일 위로 오도록 정렬.
-		String SQL = "SELECT * FROM tbl_bbs ORDER BY bbsRegDate DESC ";
+		String SQL = "SELECT * FROM tbl_bbs ORDER BY bbsID DESC ";
 		try { 
 			Statement stmt = conn.createStatement(); // 쿼리문을 실행하기 위해 Statement객체 생성.
 			rs = stmt.executeQuery(SQL); // SELECT쿼리문을 실행시 사용, 실행결과는 ResultSet객체로 반환
@@ -75,10 +76,66 @@ public class BoardDAO {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
 		//게시글 전체 목록을 출력한다.
 		return list;
 	}
+	
+	// 전체 게시글 수 구하는 메서드
+	public int getTotal() {
+		int result = 0;
+		
+		String SQL = "SELECT COUNT(*) AS toal FROM tbl_bbs ";
+		
+		try {
+			Statement stmt = conn.createStatement();
+			rs = stmt.executeQuery(SQL);
+			
+			if(rs.next()) {
+				result = rs.getInt("total");
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		
+		return result;
+	}
+	
+	// 페이징 + 글 목록 가져오는 getList 메서드. ArrayList<BoardVO>에 글정보들을 담아 반환해줌.
+	public ArrayList<BoardVO> getListPage(int startRow, int pageSize) {
+		//BoardVO 클래스에서 나오는 인스턴스를 보관할 수 있는 list를 하나만들어서 new ArrayList<BoardVO>();를 담아준다.
+		ArrayList<BoardVO> list = new ArrayList<BoardVO>();
+		//최신글이 제일 위로 오도록 정렬.
+		String SQL = "SELECT * FROM tbl_bbs ORDER BY bbsID DESC  LEMIT ?, ? ";
+		try { 
+			PreparedStatement pstmt = conn.prepareStatement(SQL); // 쿼리문을 실행하기 위해 Statement객체 생성.
+			
+			pstmt.setInt(1, startRow -1 ); // 시작행-1 (시작 row 인덱스 번호)
+			pstmt.setInt(2, pageSize); // 페이지크기 (한번에 출력되는 수)
+			
+			rs = pstmt.executeQuery(); // SELECT쿼리문을 실행시 사용, 실행결과는 ResultSet객체로 반환
+			
+			//반복해서 커서를 이동시켜 rs.next()에 결과값이 있을 경우, 결과값들을 한행씩 boardVO 인스턴스에 저장.
+			while(rs.next()) {
+				//결과값을 담을 boardVO 인스턴스 생성
+				BoardVO boardVO = new BoardVO();
+				//만든 boardVO인스턴스 안에 쿼리문을 실행한 결과 데이터인 rs의 값들을 다 담아서
+				boardVO.setBbsID(rs.getInt("bbsID")); //글 고유번호
+				boardVO.setBbsTitle(rs.getString("bbsTitle")); //글제목
+				boardVO.setUserID(rs.getString("userID")); //글작성자아이디
+				boardVO.setBbsContent(rs.getString("bbsContent")); //글내용
+				boardVO.setBbsRegDate(rs.getString("bbsRegDate")); //글작성일
+				boardVO.setBbsViewcount(rs.getInt("bbsViewcount")); //글조회수
+				
+				//게시글데이터가 한행씩 담긴 boardVO인스턴스를 메서드 반환값인 list(글전체 목록)에 담아준다.
+				list.add(boardVO);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		//게시글 전체 목록을 출력한다.
+		return list;
+	}
+	
 	
 	//하나의 게시글을 보여주는 메서드. 매개변수로 넘어온 'bbsID'에 데이터가 존재한다면 그 데이터에 맞는 'BoardVO'인스턴스를 생성하고 해당 내용들을 모두 불러와 정보를 리턴해주는 메서드. 
 	public BoardVO getBoardVO(int bbsID) {
@@ -103,7 +160,6 @@ public class BoardDAO {
 				boardVO.setBbsRegDate(rs.getString("bbsRegDate")); //글작성일
 				boardVO.setBbsViewcount(rs.getInt("bbsViewcount")); //글조회수
 				
-				System.out.println(boardVO);
 				//해당 bbsID의 글정보가 담긴 boardVO인스턴스를 반환.
 				return boardVO;
 			}
