@@ -61,6 +61,9 @@ BoardDAO boardDAO = new BoardDAO(); %>
 h1 {
 	font-family : 'Hanna';
 }
+ul {
+    margin : 0;
+}
 </style>
 <body>
 <jsp:include page="./include/nav.jsp" />
@@ -118,12 +121,13 @@ h1 {
                 </tbody>
             </table> 
             <!--페이징 처리-->
-            <td>
+            <div width="90%" style="text-align:center;">
                 <%= BoardPage.pagingStr(totalCount, pageSize,blockPage, pageNum, request.getRequestURI()) %>  
-            </td>
+                            <a href="write.jsp" class="btn btn-primary pull-right">글쓰기</a>
+            </div>
                   
             <!-- 테이블 자체는 글의 목록을 보여주는 역할뿐. 글을 작성할 수 있는 화면으로 넘어갈 수 있게 버튼 추가 -->
-            <a href="write.jsp" class="btn btn-primary pull-right">글쓰기</a>
+
         </div>
     </div>
 	

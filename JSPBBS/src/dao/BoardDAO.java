@@ -84,7 +84,7 @@ public class BoardDAO {
 	public int getTotal() {
 		int result = 0;
 		
-		String SQL = "SELECT COUNT(*) AS toal FROM tbl_bbs ";
+		String SQL = "SELECT COUNT(*) AS total FROM tbl_bbs ";
 		
 		try {
 			Statement stmt = conn.createStatement();
@@ -105,7 +105,7 @@ public class BoardDAO {
 		//BoardVO 클래스에서 나오는 인스턴스를 보관할 수 있는 list를 하나만들어서 new ArrayList<BoardVO>();를 담아준다.
 		ArrayList<BoardVO> list = new ArrayList<BoardVO>();
 		//최신글이 제일 위로 오도록 정렬.
-		String SQL = "SELECT * FROM tbl_bbs ORDER BY bbsID DESC  LEMIT ?, ? ";
+		String SQL = "SELECT * FROM tbl_bbs ORDER BY bbsID DESC  LIMIT ?, ? ";
 		try { 
 			PreparedStatement pstmt = conn.prepareStatement(SQL); // 쿼리문을 실행하기 위해 Statement객체 생성.
 			
