@@ -72,11 +72,13 @@ public class BoardDAO {
 
 				//게시글데이터가 한행씩 담긴 boardVO인스턴스를 메서드 반환값인 list(글전체 목록)에 담아준다.
 				list.add(boardVO);
+				System.out.println("getList 호출1 : " + boardVO);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		//게시글 전체 목록을 출력한다.
+		System.out.println("getList 호출2 : " + list);
 		return list;
 	}
 	
@@ -160,6 +162,10 @@ public class BoardDAO {
 				boardVO.setBbsRegDate(rs.getString("bbsRegDate")); //글작성일
 				boardVO.setBbsViewcount(rs.getInt("bbsViewcount")); //글조회수
 				
+<<<<<<< HEAD
+=======
+				System.out.println("getBoardVO 호출 : " + boardVO);
+>>>>>>> refs/remotes/origin/main
 				//해당 bbsID의 글정보가 담긴 boardVO인스턴스를 반환.
 				return boardVO;
 			}

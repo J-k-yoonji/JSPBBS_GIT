@@ -54,10 +54,17 @@
 				
 				//입력까지 잘 됐다면, 실제로 데이터 베이스에 등록을 해준다. 
 				
+<<<<<<< HEAD
 				// 폼값 받기
 /* 				String title = request.getParameter("title");
 				String content = request.getParameter("content"); */
 /* 				
+=======
+/* 				// 폼값 받기
+				String title = request.getParameter("title");
+				String content = request.getParameter("content");
+				
+>>>>>>> refs/remotes/origin/main
 				// 폼값을 VO객체에 저장
 				BoardVO boardVO = new BoardVO();
 				boardVO.setBbsTitle(title); 
@@ -65,6 +72,7 @@
 				
 				//boardDAO 인스턴스를 만들고, write메서드를 호출,실행하여 실제로 게시글을 작성 할 수 있게 한다. userID
 				BoardDAO boardDAO = new BoardDAO();
+<<<<<<< HEAD
                 String title = boardVO.getBbsTitle();
 
 //				int result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent()); //원래 코드
@@ -76,6 +84,9 @@
                 	result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent()); //원래 코드
                 }
 				 
+=======
+				int result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent());
+>>>>>>> refs/remotes/origin/main
 				
 				
 				//만약에 함수에 반환된 값이 -1라면 DB오류 발생이니까
