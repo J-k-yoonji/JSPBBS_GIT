@@ -12,10 +12,12 @@
   <session-config>
   	<session-timeout>20</session-timeout>
   </session-config>
+  <!-- pageSize : 한 화면에 출력할 게시물 개수 -->
   <context-param>
   	<param-name>POSTS_PER_PAGE</param-name>
   	<param-value>10</param-value>
   </context-param>
+  <!-- blockPage : 한 화면에 출력할 페이지 번호 블록 개수 -->
   <context-param>
   	<param-name>PAGES_PER_BLOCK</param-name>
   	<param-value>5</param-value>

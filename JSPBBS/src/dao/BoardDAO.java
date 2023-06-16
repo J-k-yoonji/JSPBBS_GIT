@@ -104,8 +104,8 @@ public class BoardDAO {
 	public ArrayList<BoardVO> getListPage(int startRow, int pageSize) {
 		//BoardVO 클래스에서 나오는 인스턴스를 보관할 수 있는 list를 하나만들어서 new ArrayList<BoardVO>();를 담아준다.
 		ArrayList<BoardVO> list = new ArrayList<BoardVO>();
-		//최신글이 제일 위로 오도록 정렬.
-		String SQL = "SELECT * FROM tbl_bbs ORDER BY bbsID DESC  LIMIT ?, ? ";
+		//최신글이 제일 위로 오도록 정렬. 0,4 : 1번쨰 레코드부터 4개!
+		String SQL = "SELECT * FROM tbl_bbs ORDER BY bbsID DESC  LIMIT ?, ? "; 
 		try { 
 			PreparedStatement pstmt = conn.prepareStatement(SQL); // 쿼리문을 실행하기 위해 Statement객체 생성.
 			

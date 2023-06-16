@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="utils.BoardPage" %>    
+<%@ page import="utils.BoardSession" %>    
 <%@ page import="java.io.PrintWriter" %>
 <!-- BbsDAO 함수를 사용하기때문에 가져오기 -->
 <%@ page import="dao.BoardDAO" %>
@@ -10,24 +11,25 @@
 <%@ page import="java.util.ArrayList" %>    
 <!-- 건너오는 모든 데이터를 UTF-8로 받기위해 설정 -->
 <% request.setCharacterEncoding("UTF-8"); %>
+  
+<!-- 페이징관련 처리 코드 -->
 
 <%//게시글을 담을 인스턴스
 BoardDAO boardDAO = new BoardDAO(); %>
 
-<!-- 페이징관련 처리 코드 -->
+
+
 <%
-
-
-	int totalCount = boardDAO.getTotal();  // 게시물 수 확인
+	int totalCount = boardDAO.getTotal();  // 총 게시물 수 확인
 	
 	/*** 페이지 처리 start ***/
-	// 전체 페이지 수 계산
-	int pageSize = Integer.parseInt(application.getInitParameter("POSTS_PER_PAGE"));
-	int blockPage = Integer.parseInt(application.getInitParameter("PAGES_PER_BLOCK"));
-	int totalPage = (int)Math.ceil((double)totalCount / pageSize); // 전체 페이지 수
+	// 전체 페이지 수 계산.
+	int pageSize = Integer.parseInt(application.getInitParameter("POSTS_PER_PAGE")); //한 화면에 출력할 게시물 개수
+	int blockPage = Integer.parseInt(application.getInitParameter("PAGES_PER_BLOCK")); //한 화면에 출력할 페이지 번호 블록 개수
+	int totalPage = (int)Math.ceil((double)totalCount / pageSize); //전체 페이지 수. 올림. 
 	
 	// 현재 페이지 확인
-	int pageNum = 1;  // 기본값
+	int pageNum = 1;  // 현재페이지 번호. 기본값 1로 설정.
 	String pageTemp = request.getParameter("pageNum");
 	if (pageTemp != null && !pageTemp.equals(""))
 	    pageNum = Integer.parseInt(pageTemp); // 요청받은 페이지로 수정
@@ -51,24 +53,43 @@ BoardDAO boardDAO = new BoardDAO(); %>
 <title>게시판 목록</title>
 </head>
 <style>
-/* 구글에서 제공해 주는 폰트를 가져다 쓰는 방법 해당 폰트가 있는 구글의 주소로 매칭*/
-@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
-@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
-
-* {
-	font-family : 'Nanum Gothic';
-}
-h1 {
-	font-family : 'Hanna';
-}
-ul {
-    margin : 0;
-}
+	/* 구글에서 제공해 주는 폰트를 가져다 쓰는 방법 해당 폰트가 있는 구글의 주소로 매칭*/
+	@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+	@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
+	
+	* {
+		font-family : 'Nanum Gothic';
+	}
+	h1 {
+		font-family : 'Hanna';
+	}
 </style>
 <body>
 <jsp:include page="./include/nav.jsp" />
+
+<%= BoardSession.sessionChkStr(request)%>
+
+<%-- <% String sessionChkStr = BoardSession.sessionChkStr(request); 
+<%= sessionChkStr %> --%>
+
 <!-- 내비게이션 바  -->
-	
+			<!-- 게시판 글목록 bbs.jsp 클릭했을 경우 시작-->
+<%-- 	<%
+		//로그인한사람이라면	 userID라는 변수에 해당 아이디가 담기고 그렇지 않으면 null값
+		String userID = null;
+		if (session.getAttribute("userID") != null) {
+			userID = (String) session.getAttribute("userID");
+		} 
+		//로그인 안한 경우에 로그인 페이지로 돌려보내 주는 java code 작성
+		if(userID == null) {
+			PrintWriter script = response.getWriter();
+			script.println("<script>");
+			script.println("alert('로그인을 하세요.')");
+			script.println("location.href = 'login.jsp'");
+			script.println("</script>");
+		}
+	%> --%>
+
 	<!-- 여기서 부터 게시판 목록화면-->
     <div class="container">
         <!-- 테이블이 들어갈 수 있는 공간 -->
