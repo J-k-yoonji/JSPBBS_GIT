@@ -1,6 +1,7 @@
 <!-- 실제로 글쓰기를 눌러서 글을 작성해 주는 페이지 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="utils.BoardSession" %> 	
 <%@ page import="vo.BoardVO"%>	
 <!-- 게시글을 작성할 수 있는 데이터베이스는 BbsDAO객체를 이용해서 다룰수 있기때문에 참조 -->	
 <%@ page import="dao.BoardDAO"%>
@@ -27,6 +28,7 @@
 <title>글쓰기 처리</title>
 </head>
 <body>
+<%= BoardSession.sessionChkStr(request)%>
 	<%
 /* 	    BoardVO boardVO = new BoardVO(); */
 	    //현재 세션 상태 체크
@@ -54,7 +56,6 @@
 				
 				//입력까지 잘 됐다면, 실제로 데이터 베이스에 등록을 해준다. 
 				
-<<<<<<< HEAD
 				// 폼값 받기
 /* 				String title = request.getParameter("title");
 				String content = request.getParameter("content"); */
@@ -72,7 +73,7 @@
 				
 				//boardDAO 인스턴스를 만들고, write메서드를 호출,실행하여 실제로 게시글을 작성 할 수 있게 한다. userID
 				BoardDAO boardDAO = new BoardDAO();
-<<<<<<< HEAD
+
                 String title = boardVO.getBbsTitle();
 
 //				int result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent()); //원래 코드
@@ -84,9 +85,9 @@
                 	result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent()); //원래 코드
                 }
 				 
-=======
-				int result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent());
->>>>>>> refs/remotes/origin/main
+
+//				int result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent());
+
 				
 				
 				//만약에 함수에 반환된 값이 -1라면 DB오류 발생이니까

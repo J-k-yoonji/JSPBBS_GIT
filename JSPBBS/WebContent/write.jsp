@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="utils.BoardSession" %>     
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,6 +26,7 @@
 <body>
 <jsp:include page="./include/nav.jsp" />
 <!-- 내비게이션 바  -->
+<%= BoardSession.sessionChkStr(request)%>
 	
 	<!-- 게시판 글쓰기화면 시작-->
 	<div class="container">

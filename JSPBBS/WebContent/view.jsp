@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="utils.BoardSession" %> 
 <%@ page import="vo.BoardVO"%>
 <%@ page import="dao.BoardDAO" %>
 <%@ page import="java.io.PrintWriter" %>    
@@ -30,6 +31,7 @@
 </style>
 <body>
 <jsp:include page="./include/nav.jsp" />
+<%= BoardSession.sessionChkStr(request)%>
 <!-- 내비게이션 바  -->
 	
 	<!-- 게시판 글상세보기 화면 시작-->

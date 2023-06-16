@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="utils.BoardSession" %>     
 <%@ page import="vo.BoardVO"%>
 <%@ page import="dao.BoardDAO" %>
 <%@ page import="java.io.PrintWriter" %>      
@@ -12,6 +13,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<%= BoardSession.sessionChkStr(request)%>
 	<%
 		String userID = null;
 		if (session.getAttribute("userID") != null) {//유저아이디이름으로 세션이 존재하는 회원들은 
