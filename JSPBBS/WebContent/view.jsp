@@ -1,3 +1,4 @@
+<%@page import="java.net.URLEncoder"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="utils.BoardSession" %> 
@@ -108,6 +109,10 @@
 							<% str = str.replaceAll(">", "&gt;"); %>
 							<% str = str.replaceAll("\n","<br>"); %>
 							<%= str %>
+						</tr>
+						<tr>
+							<td>첨부파일</td>
+							<td><%= boardVO.getOfile() %><a href="Download.jsp?oName=<%= URLEncoder.encode(boardVO.getOfile(),"UTF-8") %>&sName=<%= URLEncoder.encode(boardVO.getSfile(),"UTF-8") %>">[다운로드]</a></td>
 						</tr>
 					</tbody>
 				</table>

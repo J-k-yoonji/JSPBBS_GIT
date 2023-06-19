@@ -32,7 +32,7 @@ BoardDAO boardDAO = new BoardDAO(); %>
 	int pageNum = 1;  // 현재페이지 번호. 기본값 1로 설정.
 	String pageTemp = request.getParameter("pageNum");
 	if (pageTemp != null && !pageTemp.equals(""))
-	    pageNum = Integer.parseInt(pageTemp); // 요청받은 페이지로 수정
+	    pageNum = Integer.parseInt(pageTemp); // 매개변수로 페이지 번호가 넘어오면, 요청받은 페이지로 수정
 	
 	// 목록에 출력할 게시물 범위 계산
 	int start = (pageNum - 1) * pageSize + 1;  // 첫 게시물 번호

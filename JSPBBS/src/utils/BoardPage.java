@@ -11,10 +11,16 @@ public class BoardPage {
         // '이전 블록/ 첫 페이지 바로가기' 출력
         int pageTemp = (((pageNum - 1) / blockPage) * blockPage) + 1;
         if (pageTemp != 1) {
-            pagingStr += "<li class=\"page-item\"><a href='" + reqUrl + "?pageNum=1'>[첫 페이지]</a></li>";
+        	//첫페이지 << : &lt;&lt;
+            pagingStr += "<li class=\"page-item\"><a href='" + reqUrl + "?pageNum=1'>&lt;&lt;</a></li>";
             pagingStr += "&nbsp;";
+            //이전불록 < : &lt;
+			/*
+			 * pagingStr += "	<li class=\"page-item\"><a href='" + reqUrl + "?pageNum=" +
+			 * (pageTemp - 1) + "'>&lt;</a></li>";
+			 */
             pagingStr += "	<li class=\"page-item\"><a href='" + reqUrl + "?pageNum=" + (pageTemp - 1)
-                         + "'>[이전 블록]</a></li>";
+            		+ "'>&lt;</a></li>";
         }
 
         // 각 페이지 번호 출력
@@ -33,11 +39,13 @@ public class BoardPage {
 
         // '다음 블록/ 마지막 페이지 바로가기' 출력
         if (pageTemp <= totalPages) {
+        	//다음블록 > : &gt;
             pagingStr += "<li class=\"page-item\"><a href='" + reqUrl + "?pageNum=" + pageTemp
-                         + "'>[다음 블록]</a></li>";
+                         + "'>&gt;</a></li>";
             pagingStr += "&nbsp;";
+            //마지막페이지 >> : &gt;&gt;;
             pagingStr += "<li class=\"page-item\"><a href='" + reqUrl + "?pageNum=" + totalPages
-                         + "'>[마지막 페이지]</a></li>";
+                         + "'>&gt;&gt;</a></li>";
         }
         pagingStr += "</ul>";
 

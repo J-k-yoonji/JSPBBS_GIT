@@ -48,6 +48,29 @@ public class BoardDAO {
 		return -1; 
 	}
 	
+	// 파일첨부 + 실제로 글을 작성하는 writeFileBbs메서드.  Title,ID,Content, ofile, sfile 값을 받아와 메서드를 실행시킨다.
+	public int writeFileBbs(String bbsTitle, String userID, String bbsContent, String ofile, String sfile) { 
+		int result = 0;
+		//BBS 테이블에 들어갈 인자 6개를 ?로 선언 해준다.
+		String SQL = "INSERT INTO tbl_bbs (bbsTitle, userID, bbsContent, ofile, sfile) VALUES(?, ?, ?, ? ,?)";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+//			pstmt.setInt(1, getNext());
+			pstmt.setString(1, bbsTitle);
+			pstmt.setString(2, userID);
+			pstmt.setString(3, bbsContent);
+			pstmt.setString(4, ofile);
+			pstmt.setString(5, sfile);
+			//INSERT같은 경우에는 성공했을때 0이상의 값을 반환하기 때문에 return을 이렇게 작성해준다.
+			result = pstmt.executeUpdate();
+			return result;
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		//데이터베이스 오류
+		return -1; 
+	}
+	
 	//글 목록 가져오는 getList 메서드. ArrayList<BoardVO>에 글정보들을 담아 반환해줌.
 	public ArrayList<BoardVO> getList() {
 		//BoardVO 클래스에서 나오는 인스턴스를 보관할 수 있는 list를 하나만들어서 new ArrayList<BoardVO>();를 담아준다.
@@ -159,6 +182,8 @@ public class BoardDAO {
 				boardVO.setBbsTitle(rs.getString("bbsTitle")); //글제목
 				boardVO.setUserID(rs.getString("userID")); //글작성자아이디
 				boardVO.setBbsContent(rs.getString("bbsContent")); //글내용
+				boardVO.setOfile(rs.getString("Ofile")); //글내용
+				boardVO.setSfile(rs.getString("Sfile")); //글내용
 				boardVO.setBbsRegDate(rs.getString("bbsRegDate")); //글작성일
 				boardVO.setBbsViewcount(rs.getInt("bbsViewcount")); //글조회수
 				

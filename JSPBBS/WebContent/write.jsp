@@ -23,6 +23,53 @@
 		font-family : 'Hanna';
 	}
 </style>
+<script>
+    function validateForm(form) { 
+        if (form.bbsTitle.value == "") {
+            alert("제목을 입력하세요.");
+            form.bbsTitle.focus();
+            return false;
+        }
+        if (form.bbsContent.value == "") {
+            alert("내용을 입력하세요.");
+            form.bbsContent.focus();
+            return false;
+        }
+        if (form.attachedFile.value == "") {
+            alert("파일을 첨부하세요.");
+            return false;
+        } 
+    }
+    
+    
+    function checkSize(input) {
+        if (input.files && input.files[0].size > (20 * 1024 * 1024)) {
+            alert("파일 사이즈가 30MB 를 넘습니다.");
+            input.value = null;
+        }
+    }
+  
+    
+    function fileTypeCheck(obj) {
+
+    	pathpoint = obj.value.lastIndexOf('.');
+
+    	filepoint = obj.value.substring(pathpoint+1,obj.length);
+
+    	filetype = filepoint.toLowerCase();
+
+    	if(filetype=='jsp') {
+
+    		// jsp 확장자 파일인 경우 업로드 제한.
+
+    		alert('jsp파일은 업로드할 수 없습니다.');
+    		obj.value = null;
+    		
+    		return false;
+    	}
+    }
+    
+</script>
 <body>
 <jsp:include page="./include/nav.jsp" />
 <!-- 내비게이션 바  -->
@@ -33,7 +80,7 @@
 		<!-- bbs에서 만든 양식 참조 사용 -->
 		<div class = "row">
 		<!-- form -->
-			<form method="post" action="writeAction.jsp">
+			<form name="fileForm" method="post" action="writeFileAction.jsp" enctype="multipart/form-data" onsubmit="return validateForm(this);">
 			<table class="table table-striped" style="text-align:center; border:1px solid #dddddd"> 
 				<thead>
 					<tr>
@@ -45,12 +92,16 @@
 					<!-- 글 제목과 글 작성이 각각 한줄로 들어갈 수 있도록 tr로 각각 묶어준다. -->
 					<tr>
 					<!-- 글 제목을 작성할 수있는 input을 삽입 해준다. -->
-						<td><input type="text" class="form-control" placeholder="글 제목" name="bbsTitle" maxlength="50"></td>
+						<td><input type="text" class="form-control" placeholder="글 제목" name="bbsTitle" maxlength="50" /></td>
 					</tr>
 					<tr>
 					<!-- 장문의 글을 작성 할 수있는 textarea태그를 이용해서 Content를 입력하도록 삽입한다. -->
 						<td><textarea class="form-control" placeholder="글 내용" name="bbsContent" maxlength="2048" style="height: 350px;"></textarea></td>
 					</tr>
+ 					<tr>
+						<td><input type="file" name="attachedFile" id="attachedFile" onchange="checkSize(this); fileTypeCheck(this);"/>
+					    <p style="color:red; text-align:left;">${errorMessage }</p></td>
+					</tr> 
 				</tbody>
 			</table>
 				<!-- 사용자에게 보여지는 글쓰기 버튼을 구현 -->	

@@ -13,12 +13,16 @@
 	response.setContentType("text/html; charset=UTF-8");
 %>
 <!-- 하나의 게시글 정보를 담을 수 있게 Bbs자바빈즈를 사용-->
-<jsp:useBean id="boardVO" class="vo.BoardVO" scope="request" />
+<% BoardVO boardVO = new BoardVO(); %>
+<%-- <jsp:useBean id="boardVO" class="vo.BoardVO" scope="page" />
 <!-- 하나의 게시글 인스턴스 구현 -->
 <jsp:setProperty name="boardVO" property="bbsTitle" />
-<jsp:setProperty name="boardVO" property="bbsContent" />
+<jsp:setProperty name="boardVO" property="bbsContent" /> --%>
 <%
-	System.out.println(boardVO);
+    String title = request.getParameter("bbsTitle");
+    String content = request.getParameter("bbsContent");
+	System.out.println( "title : " + title );
+	System.out.println( "content : " + content );
 %>
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -46,7 +50,8 @@
 			script.println("</script>");
 		} else {
 			//로그인한 사람들의 경우, 입력이 안 된 부분이 없는지 체크
-			if (boardVO.getBbsTitle() == null || boardVO.getBbsContent() == null) {
+			if (title == null || content == null
+					|| title.equals("") || content.equals("")) {
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
 				script.println("alert('입력이 안된 사항이 있습니다')");
@@ -56,39 +61,20 @@
 				
 				//입력까지 잘 됐다면, 실제로 데이터 베이스에 등록을 해준다. 
 				
-				// 폼값 받기
-/* 				String title = request.getParameter("title");
-				String content = request.getParameter("content"); */
-/* 				
-=======
-/* 				// 폼값 받기
-				String title = request.getParameter("title");
-				String content = request.getParameter("content");
-				
->>>>>>> refs/remotes/origin/main
-				// 폼값을 VO객체에 저장
-				BoardVO boardVO = new BoardVO();
-				boardVO.setBbsTitle(title); 
-				boardVO.setBbsContent(content);  */
 				
 				//boardDAO 인스턴스를 만들고, write메서드를 호출,실행하여 실제로 게시글을 작성 할 수 있게 한다. userID
 				BoardDAO boardDAO = new BoardDAO();
 
-                String title = boardVO.getBbsTitle();
-
-//				int result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent()); //원래 코드
+		        // userID 외에는 request.getParameter("bbsTitle~") 로 가져온 것!
+				int result = boardDAO.write(title, userID, content); //원래 코드
  				
                 //더미데이터 생성을 위해 임시로 작성
-                int result = 0;
+/*                  int result = 0;
                 for (int i = 1; i<=100; i++) {
                 	boardVO.setBbsTitle(title + "-" + i);
-                	result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent()); //원래 코드
-                }
-				 
+                	result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent());
+                }  */
 
-//				int result = boardDAO.write(boardVO.getBbsTitle(), userID, boardVO.getBbsContent());
-
-				
 				
 				//만약에 함수에 반환된 값이 -1라면 DB오류 발생이니까
 				if (result == -1) {

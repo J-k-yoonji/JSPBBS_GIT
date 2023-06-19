@@ -8,6 +8,8 @@ public class BoardVO {
 	private String bbsRegDate;
 	private String bbsModDate;
 	private String bbsContent;
+	private String ofile; //원본파일명
+	private String sfile; //저장된 파일명
 	private int bbsViewcount;
 	private int boardID;
 	
@@ -47,6 +49,18 @@ public class BoardVO {
 	public void setBbsContent(String bbsContent) {
 		this.bbsContent = bbsContent;
 	}
+	public String getOfile() {
+		return ofile;
+	}
+	public void setOfile(String ofile) {
+		this.ofile = ofile;
+	}
+	public String getSfile() {
+		return sfile;
+	}
+	public void setSfile(String sfile) {
+		this.sfile = sfile;
+	}
 	public int getBbsViewcount() {
 		return bbsViewcount;
 	}
@@ -59,4 +73,5 @@ public class BoardVO {
 	public void setBoardID(int boardID) {
 		this.boardID = boardID;
 	}
+	
 }
