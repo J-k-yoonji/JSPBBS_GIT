@@ -37,11 +37,13 @@
 	
 	<!-- 게시판 글상세보기 화면 시작-->
 	<%
-		//로그인한 사람이라면	userID 라는 변수에 해당 아이디가 담기고 그렇지 않으면 null값
+		//로그인한 사람이라면	userID 라는 변수에 해당 아이디가 담기고 그렇지 않으면 null값 (아래 수정/삭제 버튼은 해당글 작성자에게만 보여주기 위해)
 		String userID = null;
 		if (session.getAttribute("userID") != null) {
 			userID = (String) session.getAttribute("userID");
 		}
+		
+		//로그인 안한 경우에 로그인 페이지로 돌려보내 주는 java code 작성(BoardSession.java에 메서드 만들어두었으므로 삭제함.)
 		//매개변수및 기본셋팅 처리 하는 부분
 		int bbsID = 0;
 		//만약에 매개변수로 넘어온 bbsID라는 매개변수가 존재 할 시 
@@ -50,16 +52,7 @@
 			//파라미터는 항상 정수형으로 바꿔주는 parseInt를 사용해야 한다. 다음과 같이 정수형으로 변환시켜준다.
 			bbsID = Integer.parseInt(request.getParameter("bbsID"));
 		}
-		//받아온 bbsID가 0이면 유효하지 않은 글이라고 넣어준다.
-		if (bbsID == 0) {
-			PrintWriter script = response.getWriter();
-			script.println("<script>");
-			script.println("alert('유효하지 않은 글 입니다.')");
-			//다시 글목록인 bbs.jsp로 돌려보내주자.
-			script.println("location.href = 'bbs.jsp'");
-			script.println("</script>");
-			//bbsID가 존재해야지, 특정한 글을 볼 수있도록 하는 거고,
-		}
+
 		//해당글의 구체적인 내용을 BbsDAO 내부 만들었던 getBbs함수를 실행시켜주는 부분 
 		BoardDAO boardDAO = new BoardDAO();
 		BoardVO boardVO = boardDAO.getBoardVO(bbsID);

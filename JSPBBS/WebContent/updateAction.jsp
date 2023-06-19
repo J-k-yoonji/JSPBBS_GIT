@@ -19,13 +19,9 @@
 		if (session.getAttribute("userID") != null) {//유저아이디이름으로 세션이 존재하는 회원들은 
 			userID = (String) session.getAttribute("userID");//유저아이디에 해당 세션값을 넣어준다.
 		}
-		if (userID == null) {
-			PrintWriter script = response.getWriter();
-			script.println("<script>");
-			script.println("alert('로그인을 하세요.')");
-			script.println("location.href = 'login.jsp'");
-			script.println("</script>");
-		} 
+
+		//로그인 안한 경우에 로그인 페이지로 돌려보내 주는 java code 작성(BoardSession.java에 메서드 만들어두었으므로 삭제함.)
+		
 		int bbsID = 0;
 		//view페이지에서 넘겨준 bbsID를 들고오는 소스 코드
 		if (request.getParameter("bbsID") != null) {
