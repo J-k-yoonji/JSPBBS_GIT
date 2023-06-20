@@ -26,6 +26,59 @@
 		font-family : 'Hanna';
 	}
 </style>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+$(document).ready(function () {
+    var ofilename = $("#prevOfile")[0].value;
+    console.log( ofilename );
+});
+
+    function validateForm(form) { 
+        if (form.bbsTitle.value == "") {
+            alert("제목을 입력하세요.");
+            form.bbsTitle.focus();
+            return false;
+        }
+        if (form.bbsContent.value == "") {
+            alert("내용을 입력하세요.");
+            form.bbsContent.focus();
+            return false;
+        }
+        if (form.ofile.value == "") {
+            alert("파일을 첨부하세요.");
+            return false;
+        } 
+    }
+    
+    
+    function checkSize(input) {
+        if (input.files && input.files[0].size > (20 * 1024 * 1024)) {
+            alert("파일 사이즈가 30MB 를 넘습니다.");
+            input.value = null;
+        }
+    }
+  
+    
+    function fileTypeCheck(obj) {
+
+    	pathpoint = obj.value.lastIndexOf('.');
+
+    	filepoint = obj.value.substring(pathpoint+1,obj.length);
+
+    	filetype = filepoint.toLowerCase();
+
+    	if(filetype=='jsp') {
+
+    		// jsp 확장자 파일인 경우 업로드 제한.
+
+    		alert('jsp파일은 업로드할 수 없습니다.');
+    		obj.value = null;
+    		
+    		return false;
+    	}
+    }
+    
+</script>
 <body>
 <jsp:include page="./include/nav.jsp" />
 <!-- 내비게이션 바  -->
@@ -59,7 +112,7 @@
 		//만약 userID와 뷰페이지에서 넘겨받은 bbsID값을 가지고 해당 글을 가져온 후
 		BoardVO boardVO = new BoardDAO().getBoardVO(bbsID);
 		//실제로 이 글의 작성자가 일치하는지 비교해준다. userID는 세션에 있는 값이고, bbs.getUserID는 이글을 작성한 사람의 값이다.
-		if (!userID.equals(boardVO.getUserID())) {
+		if (userID == null || !userID.equals(boardVO.getUserID())) {
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('권한이 없습니다.')");
@@ -74,7 +127,10 @@
 		<!-- bbs에서 만든 양식 참조 사용 -->
 		<div class = "row">
 		<!-- form -->
-			<form method="post" action="updateAction.jsp?bbsID=<%= bbsID %>">
+			<form name="fileForm" method="post" action="updateAction.jsp?bbsID=<%= bbsID %>" enctype="multipart/form-data" onsubmit="return validateForm(this);">
+			<input type="hidden" name="bbsID" value="<%=boardVO.getBbsID()%>" />
+			<input type="hidden" name="prevOfile" id="prevOfile" value="<%=boardVO.getOfile()%>" />
+			<input type="hidden" name="prevSfile" value="<%=boardVO.getSfile()%>" />
 			<table class="table table-striped" style="text-align:center; border:1px solid #dddddd"> 
 				<thead>
 					<tr>
@@ -94,6 +150,17 @@
 						<td><textarea class="form-control" placeholder="글 내용" name="bbsContent" maxlength="2048" 
 								style="height: 350px;"><%=boardVO.getBbsContent()%></textarea></td>
 					</tr>
+<%-- 					<tr style="text-align:left;">			
+					    <td>기존파일 : <span><%=boardVO.getOfile()%></span>&nbsp;<a onclick="return confirm('파일을 삭제하시겠습니까?')" href="#" class="btn btn-danger btn-sm">파일삭제</a></td>
+					</tr>    --%> 
+ 					<tr style="text-align:left;">
+						<td><span>기존파일 : <span><%=boardVO.getOfile()%></span></span>
+						<p></p>
+						<input type="file" value="<%=boardVO.getOfile()%>" name="ofile" id="ofile" onchange="checkSize(this); fileTypeCheck(this);"/>
+					    
+					    <p style="color:red; text-align:left;">${errorMessage }</p></td>    
+					</tr> 		
+
 				</tbody>
 			</table>
 				<!-- 수정완료 버튼을 생성 -->	

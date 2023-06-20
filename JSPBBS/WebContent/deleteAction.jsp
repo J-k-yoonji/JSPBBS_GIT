@@ -1,9 +1,17 @@
+<%@page import="java.io.File"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.oreilly.servlet.MultipartRequest"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="utils.BoardSession" %>     
 <%@ page import="vo.BoardVO"%>
 <%@ page import="dao.BoardDAO" %>
 <%@ page import="java.io.PrintWriter" %>          
+<%
+	request.setCharacterEncoding("UTF-8");
+	response.setContentType("text/html; charset=UTF-8");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,7 +45,7 @@
 		//현재 글의 'bbsID'에 대한 게시글을 가져온 다음, 세션을 통해 작성자 본인이 맞는지 체크한다.
 		BoardVO boardVO = new BoardDAO().getBoardVO(bbsID);
 		//userID는 세션에 있는 값이고, boardVO.getUserID는 이글을 작성한 사람의 값이다.
-		if (!userID.equals(boardVO.getUserID())) {
+		if ( userID == null || !userID.equals(boardVO.getUserID())) {
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('권한이 없습니다.')");
@@ -46,10 +54,26 @@
 			script.println("</script>");				
 		//성공적으로 권한이 있는사람이라면 넘어간다.
 		} else {
-				//글 삭제 로직을 수행한다.
+			try {
+				String saveDirectory = application.getRealPath("/Uploads");  // 저장할 디렉터리
 				BoardDAO boardDAO = new BoardDAO();
-				//인스턴스에 update로 접근을 해서 안에 글번호,제목,내용이 들어갈 수있게 만들어주면 정상적으로 작동이 되게된다.
+
+				String filename = boardDAO.getFileName(bbsID);
+				
+			    // 1. File 객체 생성
+			    File file = new File(saveDirectory + File.separator + filename);
+			    
+			    // 해당 bbsID에 첨부파일 존재시 같이 삭제! 
+				if (file.exists()) {
+					file.delete();
+				}
+			    
+				// 해당 bbsID에 관한 정보 모두 삭제!
 				int result = boardDAO.delete(bbsID);
+				
+				//인스턴스에 update로 접근을 해서 안에 글번호,제목,내용이 들어갈 수있게 만들어주면 정상적으로 작동이 되게된다.
+//				int result = boardDAO.delete(bbsID);
+	
 				//삭제 실패시
 				if (result == -1) {
 					PrintWriter script = response.getWriter();
@@ -66,6 +90,12 @@
 					//script.println("history.back()");
 					script.println("</script>");
 				}
+			}
+			catch (Exception e) {
+			    e.printStackTrace();
+			    request.setAttribute("errorMessage", "파일 업로드 오류");
+			    request.getRequestDispatcher("write.jsp").forward(request, response);
+			}
 		
 		}
 	%>

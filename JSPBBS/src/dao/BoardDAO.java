@@ -237,6 +237,28 @@ public class BoardDAO {
 			e.printStackTrace();
 		}
 		return -1; // 나머지는 데이터베이스 오류
-	}		
+	}	
+	
+	// 삭제할 파일명 가져오는 메서드
+	public String getFileName(int bbsID) {
+		String fileName = null;
+		
+		String SQL = "SELECT sfile FROM tbl_bbs WHERE bbsID = ? ";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			//bbsID값에 해당하는 글을 삭제.
+			pstmt.setInt(1, bbsID);
+			//결과가 무사히 성공을 했다면 영향받은 행의 수를 반환하므로
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				fileName = rs.getString("sfile");
+				System.out.println(fileName);
+			}
+	
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return fileName; 
+	}	
 
 }

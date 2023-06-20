@@ -35,7 +35,7 @@
             form.bbsContent.focus();
             return false;
         }
-        if (form.attachedFile.value == "") {
+        if (form.ofile.value == "") {
             alert("파일을 첨부하세요.");
             return false;
         } 
@@ -99,7 +99,7 @@
 						<td><textarea class="form-control" placeholder="글 내용" name="bbsContent" maxlength="2048" style="height: 350px;"></textarea></td>
 					</tr>
  					<tr>
-						<td><input type="file" name="attachedFile" id="attachedFile" onchange="checkSize(this); fileTypeCheck(this);"/>
+						<td><input type="file" name="ofile" id="ofile" onchange="checkSize(this); fileTypeCheck(this);"/>
 					    <p style="color:red; text-align:left;">${errorMessage }</p></td>
 					</tr> 
 				</tbody>

@@ -42,7 +42,7 @@ try {
                                                maxPostSize, encoding);
 
     // 2. 새로운 파일명 생성
-    String fileName = mr.getFilesystemName("attachedFile");  // 현재 파일 이름
+    String fileName = mr.getFilesystemName("ofile");  // 현재 파일 이름
     String ext = fileName.substring(fileName.lastIndexOf("."));  // 파일 확장자
     String now = new SimpleDateFormat("yyyyMMdd_HmsS").format(new Date());
     String newFileName = now + ext;  // 새로운 파일 이름("업로드일시.확장자")
