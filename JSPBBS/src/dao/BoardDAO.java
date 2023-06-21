@@ -71,6 +71,67 @@ public class BoardDAO {
 		return -1; 
 	}
 	
+	// 특정한 번호의 매개변수로 들어온 제목과 번호로 바꿔치기 해주는 함수를 만든다.
+	public int updateFileBbs(BoardVO boardVO) {
+		int result = 0;
+		//Table 내부에서 WHERE bbs ID 특정한 내부의 ID값에 대한 Title과 Content를 바꿔주겠다는 쿼리를 작성
+		String SQL = "UPDATE tbl_bbs SET bbsTitle = ?, bbsContent = ?, ofile = ?, sfile = ?  WHERE bbsID = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, boardVO.getBbsTitle());
+			pstmt.setString(2, boardVO.getBbsContent());
+			pstmt.setString(3, boardVO.getOfile());
+			pstmt.setString(4, boardVO.getSfile());
+			pstmt.setInt(5, boardVO.getBbsID());
+			//성공적 실행이 되면 0이상의 값이 반환되기때문에 바로실행
+			result = pstmt.executeUpdate();
+			System.out.println("getOfile() :" + boardVO.getOfile());
+			System.out.println("SQL :" + SQL);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1; // 나머지는 데이터베이스 오류
+	}
+	
+	// 특정한 번호의 매개변수로 들어온 제목과 번호로 바꿔치기 해주는 함수를 만든다.
+	public int update(int bbsID, String bbsTitle, String bbsContent) {
+		int result = 0;
+		//Table 내부에서 WHERE bbs ID 특정한 내부의 ID값에 대한 Title과 Content를 바꿔주겠다는 쿼리를 작성
+		String SQL = "UPDATE tbl_bbs SET bbsTitle = ?, bbsContent = ? WHERE bbsID = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, bbsTitle);
+			pstmt.setString(2, bbsContent);
+			pstmt.setInt(3, bbsID);
+			//성공적 실행이 되면 0이상의 값이 반환되기때문에 바로실행
+			result = pstmt.executeUpdate();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1; // 나머지는 데이터베이스 오류
+	}
+
+	//delete함수를 사용하는 jsp에서 bbsID값을 받아와서,
+	public int delete(int bbsID) {
+		int result = 0;
+		//db내부에 bbsAvailable을 0으로 바꿈으로써 사용자 입장에서는 삭제가 되었다고 볼 수있다.
+		//하지만 db내부에는 삭제된 글도 남아있다.
+		String SQL = "DELETE FROM tbl_bbs WHERE bbsID = ? ";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			//bbsID값에 해당하는 글을 삭제.
+			pstmt.setInt(1, bbsID);
+			//결과가 무사히 성공을 했다면 영향받은 행의 수를 반환하므로
+			result = pstmt.executeUpdate();
+			return result;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1; // 나머지는 데이터베이스 오류
+	}	
+	
 	//글 목록 가져오는 getList 메서드. ArrayList<BoardVO>에 글정보들을 담아 반환해줌.
 	public ArrayList<BoardVO> getList() {
 		//BoardVO 클래스에서 나오는 인스턴스를 보관할 수 있는 list를 하나만들어서 new ArrayList<BoardVO>();를 담아준다.
@@ -201,43 +262,7 @@ public class BoardDAO {
 		return null;
 	}
 	
-	// 특정한 번호의 매개변수로 들어온 제목과 번호로 바꿔치기 해주는 함수를 만든다.
-	public int update(int bbsID, String bbsTitle, String bbsContent) {
-		int result = 0;
-		//Table 내부에서 WHERE bbs ID 특정한 내부의 ID값에 대한 Title과 Content를 바꿔주겠다는 쿼리를 작성
-		String SQL = "UPDATE tbl_bbs SET bbsTitle = ?, bbsContent = ? WHERE bbsID = ?";
-		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, bbsTitle);
-			pstmt.setString(2, bbsContent);
-			pstmt.setInt(3, bbsID);
-			//성공적 실행이 되면 0이상의 값이 반환되기때문에 바로실행
-			result = pstmt.executeUpdate();
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return -1; // 나머지는 데이터베이스 오류
-	}
 
-	//delete함수를 사용하는 jsp에서 bbsID값을 받아와서,
-	public int delete(int bbsID) {
-		int result = 0;
-		//db내부에 bbsAvailable을 0으로 바꿈으로써 사용자 입장에서는 삭제가 되었다고 볼 수있다.
-		//하지만 db내부에는 삭제된 글도 남아있다.
-		String SQL = "DELETE FROM tbl_bbs WHERE bbsID = ? ";
-		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			//bbsID값에 해당하는 글을 삭제.
-			pstmt.setInt(1, bbsID);
-			//결과가 무사히 성공을 했다면 영향받은 행의 수를 반환하므로
-			result = pstmt.executeUpdate();
-			return result;
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		return -1; // 나머지는 데이터베이스 오류
-	}	
 	
 	// 삭제할 파일명 가져오는 메서드
 	public String getFileName(int bbsID) {

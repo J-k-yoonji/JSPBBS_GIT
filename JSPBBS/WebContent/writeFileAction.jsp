@@ -9,7 +9,7 @@
 <%@ page import="vo.BoardVO"%>	
 <%@ page import="dao.BoardDAO"%>
 <%@ page import="java.io.PrintWriter"%>
-<!-- 자바 클래스 사용 -->
+<!-- 건너오는 모든 데이터를 UTF-8로 받기위해 설정 -->
 <%
 	request.setCharacterEncoding("UTF-8");
 	response.setContentType("text/html; charset=UTF-8");

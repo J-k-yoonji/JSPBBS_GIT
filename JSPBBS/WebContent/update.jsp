@@ -29,9 +29,25 @@
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 $(document).ready(function () {
-    var ofilename = $("#prevOfile")[0].value;
-    console.log( ofilename );
+    var file1 = $("#prevOfile")[0].value;
+    var file2 = $("#ofile")[0].value;
+    console.log( file1 );
+    console.log( file2 );
+    
+
 });
+
+	function delPrefile(){
+	    if(confirm('기존파일을 삭제하시겠습니까?'))   {
+	    	var prefile = $("#prefile");
+	    	console.log( prefile );
+	    	prefile.hide();
+	    	return true;
+	    	
+	    } else {  
+	    	return false;
+	    }	
+	}
 
     function validateForm(form) { 
         if (form.bbsTitle.value == "") {
@@ -52,6 +68,11 @@ $(document).ready(function () {
     
     
     function checkSize(input) {
+        var file1 = $("#prevOfile")[0].value;
+        var file2 = $("#ofile")[0].value;
+        console.log( file1 );
+        console.log( file2 );
+        
         if (input.files && input.files[0].size > (20 * 1024 * 1024)) {
             alert("파일 사이즈가 30MB 를 넘습니다.");
             input.value = null;
@@ -127,7 +148,7 @@ $(document).ready(function () {
 		<!-- bbs에서 만든 양식 참조 사용 -->
 		<div class = "row">
 		<!-- form -->
-			<form name="fileForm" method="post" action="updateAction.jsp?bbsID=<%= bbsID %>" enctype="multipart/form-data" onsubmit="return validateForm(this);">
+			<form name="fileForm" method="post" action="updateFileAction.jsp?bbsID=<%= bbsID %>" enctype="multipart/form-data" onsubmit="return validateForm(this);">
 			<input type="hidden" name="bbsID" value="<%=boardVO.getBbsID()%>" />
 			<input type="hidden" name="prevOfile" id="prevOfile" value="<%=boardVO.getOfile()%>" />
 			<input type="hidden" name="prevSfile" value="<%=boardVO.getSfile()%>" />
@@ -154,9 +175,9 @@ $(document).ready(function () {
 					    <td>기존파일 : <span><%=boardVO.getOfile()%></span>&nbsp;<a onclick="return confirm('파일을 삭제하시겠습니까?')" href="#" class="btn btn-danger btn-sm">파일삭제</a></td>
 					</tr>    --%> 
  					<tr style="text-align:left;">
-						<td><span>기존파일 : <span><%=boardVO.getOfile()%></span></span>
+						<td><span id=prefile>기존파일 : <span><%=boardVO.getOfile()%></span></span>
 						<p></p>
-						<input type="file" value="<%=boardVO.getOfile()%>" name="ofile" id="ofile" onchange="checkSize(this); fileTypeCheck(this);"/>
+						<input type="file" name="ofile" id="ofile" onchange="checkSize(this); fileTypeCheck(this); delPrefile(); "/>
 					    
 					    <p style="color:red; text-align:left;">${errorMessage }</p></td>    
 					</tr> 		
